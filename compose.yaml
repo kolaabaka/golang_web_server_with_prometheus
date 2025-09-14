@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  prometheus:
+    build:
+      context: .
+      dockerfile: Dockerfile.prometheus
+    ports:
+      - 9090:9090
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+    networks:
+      - monitoring-net
+    restart: unless-stopped
+
+  back:
+    build: docker_deploy_go/.
+    ports: 
+      - "8080:8080"
+    networks:
+      - monitoring-net
+    tty: true         
+    restart: unless-stopped
+
+networks:
+  monitoring-net:
+    driver: bridge
