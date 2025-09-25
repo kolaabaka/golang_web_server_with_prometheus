@@ -1,4 +1,4 @@
-version: '3.8'
+# version: "3"
 
 services:
   prometheus:
@@ -15,13 +15,15 @@ services:
     restart: unless-stopped
 
   back:
-    build: docker_deploy_go/.
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports: 
       - "8080:8080"
     networks:
       - monitoring-net
     tty: true         
-    restart: unless-stopped
+    restart: always
 
 networks:
   monitoring-net:
